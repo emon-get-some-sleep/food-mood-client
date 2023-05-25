@@ -7,6 +7,7 @@ import pizzaImg from '../../assets/menu/pizza-bg.jpg';
 
 import saladImg from '../../assets/menu/salad-bg.jpg';
 import soupImg from '../../assets/menu/soup-bg.jpg';
+import drinksImg from '../../assets/menu/menu-bg.png';
 
 import useMenu from '../../hooks/useMenu';
 import SectionTitle from "../../../src/components/SectionTitle/SectionTitle";
@@ -20,6 +21,7 @@ const Menu = () => {
     const pizza = menu.filter(item => item.category === 'pizza');
     const salad = menu.filter(item => item.category === 'salad');
     const offered = menu.filter(item => item.category === 'offered');
+    const drinks = menu.filter(item => item.category === 'drinks');
     return (
         <div>
             <Helmet>
@@ -32,16 +34,19 @@ const Menu = () => {
             <MenuCategory items={offered} ></MenuCategory>
 
             {/* dessert menu items  */}
-            <MenuCategory items={desserts} title="Dessert" img={dessertImg}></MenuCategory>
+            <MenuCategory items={desserts} title="dessert" img={dessertImg}></MenuCategory>
 
             {/* pizza menu items  */}
-            <MenuCategory items={pizza} title="Pizza" img={pizzaImg}></MenuCategory>
+            <MenuCategory items={pizza} title="pizza" img={pizzaImg}></MenuCategory>
 
             {/* Salad menu items  */}
-            <MenuCategory items={salad} title="Salad" img={saladImg}></MenuCategory>
+            <MenuCategory items={salad} title="salad" img={saladImg}></MenuCategory>
 
             {/* Soup menu items  */}
-            <MenuCategory items={soup} title="Soup" img={soupImg}></MenuCategory>
+            <MenuCategory items={soup} title="soup" img={soupImg}></MenuCategory>
+
+            {/* Drinks menu items  */}
+            <MenuCategory items={drinks} title="drinks" img={soupImg}></MenuCategory>
 
         </div>
     );
