@@ -1,16 +1,36 @@
+import { useContext } from "react";
+import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { AuthContext } from "../../providers/AuthProvider";
 
 
 
 const SignUp = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
+  const {createUser} = useContext(AuthContext);
+
+
   const onSubmit = data => {
     console.log(data)
+    createUser(data.email, data.password)
+    .then(result => {
+      const loggedUser = result.user;
+      console.log(loggedUser);
+
+    })
+    .catch(error => {
+      console.log(error.message);
+    })
   };
 
   // console.log(watch("name"));
   return (
+    <>
+    <Helmet>
+      <title>Sign Up | Food Mood
+      </title>
+    </Helmet>
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col lg:flex-row-reverse">
         <div className="text-center lg:text-left">
@@ -33,7 +53,7 @@ const SignUp = () => {
                 placeholder="Name"
                 className="input input-bordered"
               />
-               {errors.name && <span>This field is required</span>}
+               {errors.name && <span className="text-red-500">Name field is required</span>}
             </div>
             <div className="form-control">
               <label className="label">
@@ -45,7 +65,7 @@ const SignUp = () => {
                 placeholder="email"
                 className="input input-bordered"
               />
-              {errors.email && <span>This field is required</span>}
+              {errors.email && <span className="text-red-500">Email field is required</span>}
             </div>
             <div className="form-control">
               <label className="label">
@@ -53,7 +73,11 @@ const SignUp = () => {
               </label>
               <input
                 type="password"
-                {...register("password", {required: true})}
+                {...register("password", {required: true, 
+                  minLength: 6, 
+                  maxLength: 20,
+                  pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/
+                })}
                 placeholder="password"
                 className="input input-bordered"
               />
@@ -63,15 +87,19 @@ const SignUp = () => {
                   Forgot password?
                 </a>
               </label>
-              {errors.password && <span className="text-red-500">This field is required</span>}
+              {errors.password && <span className="text-red-500">Password is required</span>}
+              {errors.password?.type == 'maxLength' && <span className="text-red-500">Password must be less than 20 characters</span>}
+              {errors.password?.type == 'pattern' && <span className="text-red-500">Password must be have one uppercase, one lowercase, one number and one special character</span>}
             </div>
             <div className="form-control mt-6">
-              <button className="btn btn-primary">Login</button>
+              
+              <input className="btn btn-primary" type="submit" value="Sign Up" />
             </div>
           </form>
         </div>
       </div>
     </div>
+    </>
   );
 };
 
