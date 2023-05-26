@@ -2,14 +2,17 @@ import { useContext } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../providers/AuthProvider";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 
 const SignUp = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  const {createUser} = useContext(AuthContext);
+  const {createUser, updateUserProfile} = useContext(AuthContext);
 
+  const navigate = useNavigate();
 
   const onSubmit = data => {
     console.log(data)
@@ -17,6 +20,19 @@ const SignUp = () => {
     .then(result => {
       const loggedUser = result.user;
       console.log(loggedUser);
+      updateUserProfile(data.name, data.photo)
+      .then(() => {
+        Swal.fire(
+          'Registered successfully',
+          'Welcome to Food Mood',
+          'success'
+        );
+        reset();
+        navigate('/');
+      })
+      .catch(error => {
+        console.log(error);
+      })
 
     })
     .catch(error => {
@@ -54,6 +70,18 @@ const SignUp = () => {
                 className="input input-bordered"
               />
                {errors.name && <span className="text-red-500">Name field is required</span>}
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Photo URL</span>
+              </label>
+              <input
+                type="text"
+                {...register("photo", {required: true})}
+                placeholder="Photo URL"
+                className="input input-bordered"
+              />
+               {errors.photo && <span className="text-red-500">photo URL field is required</span>}
             </div>
             <div className="form-control">
               <label className="label">
@@ -96,6 +124,9 @@ const SignUp = () => {
               <input className="btn btn-primary" type="submit" value="Sign Up" />
             </div>
           </form>
+          <p>
+              Already have an account? <Link to="/login">Sign In</Link>
+            </p>
         </div>
       </div>
     </div>
